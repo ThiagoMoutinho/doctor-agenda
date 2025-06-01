@@ -4,6 +4,8 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import * as z from "zod";
 
+import { authClient } from "@/lib/auth-client";
+import { useRouter } from "next/navigation";
 import { Button } from "../../../components/ui/button";
 import {
   Card,
@@ -21,6 +23,8 @@ import {
   FormMessage,
 } from "../../../components/ui/form";
 import { Input } from "../../../components/ui/input";
+import { toast } from "sonner";
+import { Loader2 } from "lucide-react";
 
 const loginSchema = z.object({
   email: z
@@ -35,6 +39,7 @@ const loginSchema = z.object({
 });
 
 const LoginForm = () => {
+  const router = useRouter();
   const form = useForm<z.infer<typeof loginSchema>>({
     resolver: zodResolver(loginSchema),
     defaultValues: {
@@ -43,8 +48,22 @@ const LoginForm = () => {
     },
   });
 
-  function onSubmit(values: z.infer<typeof loginSchema>) {
-    console.log(values);
+  async function onSubmit(values: z.infer<typeof loginSchema>) {
+    await authClient.signIn.email(
+      {
+        email: values.email,
+        password: values.password,
+      },
+      {
+        onSuccess: () => {
+          toast.success("Login realizado com sucesso");
+          router.push("/dashboard");
+        },
+        onError: () => {
+          toast.error("E-mail ou senha inválidos");
+        },
+      }
+    );
   }
 
   return (
@@ -88,8 +107,12 @@ const LoginForm = () => {
                 )}
               />
               <div className="flex flex-col gap-3">
-                <Button type="submit" className="w-full">
-                  Login
+                <Button type="submit" className="w-full" disabled={form.formState.isSubmitting}>
+                  {form.formState.isSubmitting ? (
+                    <Loader2 className="h-4 w-4 animate-spin" />
+                  ) : (
+                    "Login"
+                  )}
                 </Button>
                 <Button variant="outline" className="w-full">
                   Login com Google

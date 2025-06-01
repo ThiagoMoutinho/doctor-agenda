@@ -24,6 +24,7 @@ import {
 } from "../../../components/ui/form";
 import { Input } from "../../../components/ui/input";
 import { useRouter } from "next/navigation";
+import { toast } from "sonner";
 
 const registerSchema = z.object({
   name: z
@@ -61,7 +62,11 @@ const SingUpForm = () => {
     }, {
         onSuccess: () => {
           router.push("/dashboard");
+          toast.success("Conta criada com sucesso");
         },
+        onError: () => {
+          toast.error("E-mail já cadastrado");
+        }
       }
     );
   }
