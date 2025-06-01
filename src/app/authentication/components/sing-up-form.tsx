@@ -1,9 +1,11 @@
 "use client";
 
+import { authClient } from "@/lib/auth-client";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import * as z from "zod";
 
+import { Loader2 } from "lucide-react";
 import { Button } from "../../../components/ui/button";
 import {
   Card,
@@ -21,6 +23,7 @@ import {
   FormMessage,
 } from "../../../components/ui/form";
 import { Input } from "../../../components/ui/input";
+import { useRouter } from "next/navigation";
 
 const registerSchema = z.object({
   name: z
@@ -40,6 +43,7 @@ const registerSchema = z.object({
 });
 
 const SingUpForm = () => {
+  const router = useRouter();
   const form = useForm<z.infer<typeof registerSchema>>({
     resolver: zodResolver(registerSchema),
     defaultValues: {
@@ -49,8 +53,17 @@ const SingUpForm = () => {
     },
   });
 
-  function onSubmit(values: z.infer<typeof registerSchema>) {
-    console.log(values);
+  async function onSubmit(values: z.infer<typeof registerSchema>) {
+    await authClient.signUp.email({
+      email: values.email,
+      name: values.name,
+      password: values.password,
+    }, {
+        onSuccess: () => {
+          router.push("/dashboard");
+        },
+      }
+    );
   }
 
   return (
@@ -96,14 +109,26 @@ const SingUpForm = () => {
                   <FormItem>
                     <FormLabel>Senha</FormLabel>
                     <FormControl>
-                      <Input placeholder="Digite a sua senha" {...field} />
+                      <Input
+                        type="password"
+                        placeholder="Digite a sua senha"
+                        {...field}
+                      />
                     </FormControl>
                     <FormMessage />
                   </FormItem>
                 )}
               />
-              <Button type="submit" className="w-full">
-                Criar conta
+              <Button
+                type="submit"
+                className="w-full"
+                disabled={form.formState.isSubmitting}
+              >
+                {form.formState.isSubmitting ? (
+                  <Loader2 className="h-4 w-4 animate-spin" />
+                ) : (
+                  "Criar conta"
+                )}
               </Button>
             </CardContent>
           </form>
