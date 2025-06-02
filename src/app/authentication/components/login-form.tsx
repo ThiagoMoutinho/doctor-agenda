@@ -5,7 +5,9 @@ import { useForm } from "react-hook-form";
 import * as z from "zod";
 
 import { authClient } from "@/lib/auth-client";
+import { Loader2 } from "lucide-react";
 import { useRouter } from "next/navigation";
+import { toast } from "sonner";
 import { Button } from "../../../components/ui/button";
 import {
   Card,
@@ -23,8 +25,6 @@ import {
   FormMessage,
 } from "../../../components/ui/form";
 import { Input } from "../../../components/ui/input";
-import { toast } from "sonner";
-import { Loader2 } from "lucide-react";
 
 const loginSchema = z.object({
   email: z
@@ -62,7 +62,7 @@ const LoginForm = () => {
         onError: () => {
           toast.error("E-mail ou senha inválidos");
         },
-      }
+      },
     );
   }
 
@@ -70,12 +70,12 @@ const LoginForm = () => {
     <div>
       <Card>
         <Form {...form}>
-          <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-5">
+          <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-7">
             <CardHeader>
               <CardTitle>Login</CardTitle>
               <CardDescription>Faça login para continuar.</CardDescription>
             </CardHeader>
-            <CardContent className="space-y-4">
+            <CardContent className="space-y-5">
               <FormField
                 control={form.control}
                 name="email"
@@ -107,7 +107,11 @@ const LoginForm = () => {
                 )}
               />
               <div className="flex flex-col gap-3">
-                <Button type="submit" className="w-full" disabled={form.formState.isSubmitting}>
+                <Button
+                  type="submit"
+                  className="w-full"
+                  disabled={form.formState.isSubmitting}
+                >
                   {form.formState.isSubmitting ? (
                     <Loader2 className="h-4 w-4 animate-spin" />
                   ) : (

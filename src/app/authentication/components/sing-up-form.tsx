@@ -2,10 +2,12 @@
 
 import { authClient } from "@/lib/auth-client";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { useForm } from "react-hook-form";
-import * as z from "zod";
 
 import { Loader2 } from "lucide-react";
+import { useRouter } from "next/navigation";
+import { useForm } from "react-hook-form";
+import { toast } from "sonner";
+import * as z from "zod";
 import { Button } from "../../../components/ui/button";
 import {
   Card,
@@ -23,8 +25,6 @@ import {
   FormMessage,
 } from "../../../components/ui/form";
 import { Input } from "../../../components/ui/input";
-import { useRouter } from "next/navigation";
-import { toast } from "sonner";
 
 const registerSchema = z.object({
   name: z
@@ -55,11 +55,13 @@ const SingUpForm = () => {
   });
 
   async function onSubmit(values: z.infer<typeof registerSchema>) {
-    await authClient.signUp.email({
-      email: values.email,
-      name: values.name,
-      password: values.password,
-    }, {
+    await authClient.signUp.email(
+      {
+        email: values.email,
+        name: values.name,
+        password: values.password,
+      },
+      {
         onSuccess: () => {
           router.push("/dashboard");
           toast.success("Conta criada com sucesso");
@@ -71,7 +73,7 @@ const SingUpForm = () => {
           }
           toast.error("Erro ao criar conta");
         },
-      }
+      },
     );
   }
 
