@@ -25,6 +25,7 @@ import {
   FormMessage,
 } from "../../../components/ui/form";
 import { Input } from "../../../components/ui/input";
+import { FcGoogle } from "react-icons/fc";
 
 const loginSchema = z.object({
   email: z
@@ -48,7 +49,7 @@ const LoginForm = () => {
     },
   });
 
-  async function onSubmit(values: z.infer<typeof loginSchema>) {
+  async function handleSubmit(values: z.infer<typeof loginSchema>) {
     await authClient.signIn.email(
       {
         email: values.email,
@@ -66,11 +67,17 @@ const LoginForm = () => {
     );
   }
 
+  const handleGoogleLogin = async () => {
+   await authClient.signIn.social({
+      provider: "google",
+      callbackURL: "/dashboard",
+    });
+  };
   return (
     <div>
       <Card>
         <Form {...form}>
-          <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-7">
+          <form onSubmit={form.handleSubmit(handleSubmit)} className="space-y-7">
             <CardHeader>
               <CardTitle>Login</CardTitle>
               <CardDescription>Faça login para continuar.</CardDescription>
@@ -118,7 +125,13 @@ const LoginForm = () => {
                     "Login"
                   )}
                 </Button>
-                <Button variant="outline" className="w-full">
+                <Button
+                  onClick={handleGoogleLogin}
+                  variant="outline"
+                  className="w-full"
+                  type="button"
+                >
+                  <FcGoogle />
                   Login com Google
                 </Button>
               </div>

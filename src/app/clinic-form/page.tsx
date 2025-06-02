@@ -23,7 +23,9 @@ const ClinicFormPage = () => {
               </DialogDescription>
             </DialogHeader>
             <ClinicForm />
-            
+            <DialogFooter>
+              <Button type="submit">Save changes</Button>
+            </DialogFooter>
           </DialogContent>
         </form>
       </Dialog>
