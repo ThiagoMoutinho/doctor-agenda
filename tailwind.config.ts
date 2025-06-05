@@ -67,6 +67,11 @@ const config = {
           from: { height: "var(--radix-accordion-content-height)" },
           to: { height: "0" },
         },
+        shake: {
+          "0%, 100%": { transform: "translateX(0)" },
+          "10%, 30%, 50%, 70%, 90%": { transform: "translateX(-4px)" },
+          "20%, 40%, 60%, 80%": { transform: "translateX(4px)" },
+        },
         "gradient-rotate": {
           "0%, 100%": { transform: "rotate(0deg)" },
           "50%": { transform: "rotate(180deg)" },
@@ -98,6 +103,7 @@ const config = {
       animation: {
         "accordion-down": "accordion-down 0.2s ease-out",
         "accordion-up": "accordion-up 0.2s ease-out",
+        shake: "shake 0.5s ease-in-out",
         "gradient-rotate": "gradient-rotate 20s linear infinite",
         "gradient-move": "gradient-move 8s linear infinite",
         "gradient-diagonal": "gradient-diagonal 10s ease infinite",

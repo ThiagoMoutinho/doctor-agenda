@@ -26,7 +26,6 @@ import {
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { authClient } from "@/lib/auth-client";
-import { cn } from "@/lib/utils";
 
 const signUpSchema = z
   .object({
@@ -53,7 +52,6 @@ const signUpSchema = z
 
 export default function SignUpForm() {
   const [showPassword, setShowPassword] = React.useState(false);
-  const [shake, setShake] = React.useState(false);
   const router = useRouter();
   const form = useForm<z.infer<typeof signUpSchema>>({
     resolver: zodResolver(signUpSchema),
@@ -79,8 +77,6 @@ export default function SignUpForm() {
             router.push("/dashboard");
           },
           onError: () => {
-            setShake(true);
-            setTimeout(() => setShake(false), 500);
             form.setError("email", {
               type: "manual",
               message: "Este email já está cadastrado",
@@ -90,16 +86,12 @@ export default function SignUpForm() {
         },
       );
     } catch {
-      setShake(true);
-      setTimeout(() => setShake(false), 500);
       toast.error("Erro ao criar conta");
     }
   }
 
   return (
-    <Card
-      className="w-full max-w-[580px] shadow-lg p-2"
-    >
+    <Card className="w-full max-w-[580px] p-2 shadow-lg">
       <Form {...form}>
         <form onSubmit={form.handleSubmit(handleSubmit)} className="space-y-7">
           <CardHeader className="px-8 pt-8">
