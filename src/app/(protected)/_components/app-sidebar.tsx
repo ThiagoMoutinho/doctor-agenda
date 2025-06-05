@@ -65,6 +65,8 @@ const items = [
 ];
 
 export function AppSidebar() {
+  const session = authClient.useSession();
+
   const handleLogout = async () => {
     await authClient.signOut();
     redirect("/authentication");
@@ -103,13 +105,13 @@ export function AppSidebar() {
                   size="lg"
                   className="data-[state=open]:bg-sidebar-accent data-[state=open]:text-sidebar-accent-foreground"
                 >
-                  <Avatar className="h-8 w-8 rounded-lg">
-                    <AvatarImage src="/logo.svg" alt="Clinic souza" />
-                    <AvatarFallback className="rounded-lg">Clinic</AvatarFallback>
+                  <Avatar className="h-10 w-10 rounded-lg">
+                    <AvatarImage  alt="Clinic souza" />
+                    <AvatarFallback className="rounded-lg">{session.data?.user.clinic.name.charAt(0)}</AvatarFallback>
                   </Avatar>
                   <div className="grid flex-1 text-left text-sm leading-tight">
-                    <span className="truncate font-medium">Clinic</span>
-                    <span className="truncate text-xs">Clinic@gmail.com</span>
+                    <span className="truncate font-medium">{session.data?.user.clinic.name}</span>
+                    <span className="truncate text-xs">{session.data?.user.email}</span>
                   </div>
                   <ChevronsUpDown className="ml-auto size-4" />
                 </SidebarMenuButton>
@@ -123,12 +125,12 @@ export function AppSidebar() {
                 <DropdownMenuLabel className="p-0 font-normal">
                   <div className="flex items-center gap-2 px-1 py-1.5 text-left text-sm">
                     <Avatar className="h-8 w-8 rounded-lg">
-                      <AvatarImage src="/logo.svg" alt="Clinic souza" />
-                      <AvatarFallback className="rounded-lg">Clinic</AvatarFallback>
+                      <AvatarImage alt="Clinic souza" />
+                      <AvatarFallback className="rounded-lg">{session.data?.user.clinic.name.charAt(0)}</AvatarFallback>
                     </Avatar>
                     <div className="grid flex-1 text-left text-sm leading-tight">
-                      <span className="truncate font-medium">Clinic</span>
-                      <span className="truncate text-xs">Clinic@gmail.com</span>
+                      <span className="truncate font-medium">{session.data?.user.clinic.name}</span>
+                      <span className="truncate text-xs">{session.data?.user.email}</span>
                     </div>
                   </div>
                 </DropdownMenuLabel>
