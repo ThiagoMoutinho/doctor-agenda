@@ -74,7 +74,7 @@ export default function SignUpForm() {
         {
           onSuccess: () => {
             toast.success("Conta criada com sucesso");
-            router.push("/dashboard");
+            router.push("/clinic-form");
           },
           onError: () => {
             form.setError("email", {

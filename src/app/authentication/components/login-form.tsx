@@ -60,9 +60,14 @@ const LoginForm = () => {
         password: values.password,
       },
       {
-        onSuccess: () => {
+        onSuccess: async () => {
           toast.success("Login realizado com sucesso");
-          router.push("/dashboard");
+          const session = await authClient.getSession();
+          if (!session?.data?.user?.clinic) {
+            router.push("/clinic-form");
+          } else {
+            router.push("/dashboard");
+          }
         },
         onError: () => {
           toast.error("E-mail ou senha inválidos");
@@ -79,7 +84,7 @@ const LoginForm = () => {
   };
 
   return (
-    <Card className="w-full max-w-[580px] shadow-lg p-2" >
+    <Card className="w-full max-w-[580px] p-2 shadow-lg">
       <Form {...form}>
         <form onSubmit={form.handleSubmit(handleSubmit)} className="space-y-7">
           <CardHeader className="px-8 pt-8">

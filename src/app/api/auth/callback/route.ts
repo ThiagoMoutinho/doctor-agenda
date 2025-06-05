@@ -3,7 +3,7 @@ import { redirect } from "next/navigation";
 
 import { auth } from "@/lib/auth";
 
-export default async function HomePage() {
+export async function GET() {
   const session = await auth.api.getSession({
     headers: await headers(),
   });

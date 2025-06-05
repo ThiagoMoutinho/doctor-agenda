@@ -108,10 +108,10 @@ export function AppSidebar() {
                 >
                   <Avatar className="h-10 w-10 rounded-lg">
                     <AvatarImage  alt="Clinic souza" />
-                    <AvatarFallback className="rounded-lg">{session.data?.user.clinic.name.charAt(0)}</AvatarFallback>
+                    <AvatarFallback className="rounded-lg">{session.data?.user.name.charAt(0)}</AvatarFallback>
                   </Avatar>
                   <div className="grid flex-1 text-left text-sm leading-tight">
-                    <span className="truncate font-medium">{session.data?.user.clinic.name}</span>
+                    <span className="truncate font-medium">{session.data?.user.name}</span>
                     <span className="truncate text-xs">{session.data?.user.email}</span>
                   </div>
                   <ChevronsUpDown className="ml-auto size-4" />
@@ -127,10 +127,10 @@ export function AppSidebar() {
                   <div className="flex items-center gap-2 px-1 py-1.5 text-left text-sm">
                     <Avatar className="h-8 w-8 rounded-lg">
                       <AvatarImage alt="Clinic souza" />
-                      <AvatarFallback className="rounded-lg">{session.data?.user.clinic.name.charAt(0)}</AvatarFallback>
+                      <AvatarFallback className="rounded-lg">{session.data?.user.name.charAt(0)}</AvatarFallback>
                     </Avatar>
                     <div className="grid flex-1 text-left text-sm leading-tight">
-                      <span className="truncate font-medium">{session.data?.user.clinic.name}</span>
+                      <span className="truncate font-medium">{session.data?.user.name}</span>
                       <span className="truncate text-xs">{session.data?.user.email}</span>
                     </div>
                   </div>

@@ -10,9 +10,15 @@ const AuthenticationPage = async () => {
   const session = await auth.api.getSession({
     headers: await headers(),
   });
+
   if (session?.user) {
-    redirect("/dashboard");
+    if (!session.user.clinic) {
+      redirect("/clinic-form");
+    } else {
+      redirect("/dashboard");
+    }
   }
+
   return (
     <div className="flex h-screen w-screen items-center justify-center">
       <Tabs defaultValue="login" className="w-full max-w-[580px] shadow-lg">

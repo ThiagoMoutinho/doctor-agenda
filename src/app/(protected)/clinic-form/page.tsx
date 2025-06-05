@@ -8,14 +8,12 @@ import {
 
 import ClinicForm from "./_components/form";
 
-
-
 const ClinicFormPage = () => {
   return (
     <div>
-      <Dialog open={true}>
+      <Dialog open={true} modal={true}>
         <form>
-          <DialogContent className="sm:max-w-[425px]">
+          <DialogContent className="sm:max-w-[425px]" showCloseButton={false}>
             <DialogHeader>
               <DialogTitle>Adicione uma clínica</DialogTitle>
               <DialogDescription>
