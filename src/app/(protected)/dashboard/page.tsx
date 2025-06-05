@@ -1,12 +1,12 @@
-import { auth } from "@/lib/auth";
-
+import { eq } from "drizzle-orm";
 import { headers } from "next/headers";
 import { redirect } from "next/navigation";
 
 import { db } from "@/db";
 import { usersToClinicsTable } from "@/db/schema";
-import { eq } from "drizzle-orm";
-import SingOutButton from "./components/sing-out-button";
+import { auth } from "@/lib/auth";
+
+import SingOutButton from "./_components/sing-out-button";
 
 const DashboardPage = async () => {
   const session = await auth.api.getSession({

@@ -1,10 +1,11 @@
 "use server";
 
+import { headers } from "next/headers";
+import { redirect } from "next/navigation";
+
 import { db } from "@/db";
 import { clinicsTable, usersToClinicsTable } from "@/db/schema";
 import { auth } from "@/lib/auth";
-import { headers } from "next/headers";
-import { redirect } from "next/navigation";
 
 export async function createClinic(name: string) {
   // Verify if the user is authenticated

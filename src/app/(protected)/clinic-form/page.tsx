@@ -1,14 +1,14 @@
-import { Button } from "@/components/ui/button";
 import {
   Dialog,
   DialogContent,
   DialogDescription,
-  DialogFooter,
   DialogHeader,
   DialogTitle,
 } from "@/components/ui/dialog";
 
-import ClinicForm from "./components/form";
+import ClinicForm from "./_components/form";
+
+
 
 const ClinicFormPage = () => {
   return (
@@ -23,9 +23,6 @@ const ClinicFormPage = () => {
               </DialogDescription>
             </DialogHeader>
             <ClinicForm />
-            <DialogFooter>
-              <Button type="submit">Save changes</Button>
-            </DialogFooter>
           </DialogContent>
         </form>
       </Dialog>
