@@ -1,6 +1,7 @@
 "use client";
 
 import { zodResolver } from "@hookform/resolvers/zod";
+import { Loader2 } from "lucide-react";
 import { useAction } from "next-safe-action/hooks";
 import { useForm } from "react-hook-form";
 import { NumericFormat } from "react-number-format";
@@ -47,12 +48,10 @@ const formSchema = z
       .min(1, { message: "Preço da consulta é obrigatório" }),
     availableFromWeekDay: z
       .string()
-      .min(0, { message: "Dia da semana é obrigatório" })
-      .max(6, { message: "Dia da semana é obrigatório" }),
+      .min(1, { message: "Dia da semana é obrigatório" }),
     availableToWeekDay: z
       .string()
-      .min(0, { message: "Dia da semana é obrigatório" })
-      .max(6, { message: "Dia da semana é obrigatório" }),
+      .min(1, { message: "Dia da semana é obrigatório" }),
     availableFromTime: z
       .string()
       .min(1, { message: "Hora de início é obrigatória" }),
@@ -70,10 +69,10 @@ const formSchema = z
     },
   );
 
-  interface UpsertDoctorFormProps {
-    onSuccess?: () => void;
-    onError?: () => void;
-  }
+interface UpsertDoctorFormProps {
+  onSuccess?: () => void;
+  onError?: () => void;
+}
 
 const UpsertDoctorForm = ({ onSuccess, onError }: UpsertDoctorFormProps) => {
   const form = useForm<z.infer<typeof formSchema>>({
@@ -91,6 +90,7 @@ const UpsertDoctorForm = ({ onSuccess, onError }: UpsertDoctorFormProps) => {
 
   const upsertDoctorAction = useAction(upsertDoctor, {
     onSuccess: () => {
+      form.reset();
       toast.success("Médico adicionado com sucesso");
       onSuccess?.();
     },
@@ -101,11 +101,18 @@ const UpsertDoctorForm = ({ onSuccess, onError }: UpsertDoctorFormProps) => {
   });
 
   const onSubmit = (values: z.infer<typeof formSchema>) => {
+    const {
+      appointmentPrice,
+      availableFromWeekDay,
+      availableToWeekDay,
+      ...rest
+    } = values;
+
     upsertDoctorAction.execute({
-      ...values,
-      availableFromWeekDay: parseInt(values.availableFromWeekDay),
-      availableToWeekDay: parseInt(values.availableToWeekDay),
-      appointmentPriceInCents: values.appointmentPrice * 100,
+      ...rest,
+      appointmentPriceInCents: Math.round(appointmentPrice * 100),
+      availableFromWeekDay: parseInt(availableFromWeekDay),
+      availableToWeekDay: parseInt(availableToWeekDay),
     });
   };
 
@@ -384,10 +391,16 @@ const UpsertDoctorForm = ({ onSuccess, onError }: UpsertDoctorFormProps) => {
           <DialogFooter>
             <Button
               type="submit"
-              className="cursor-pointer"
-              disabled={upsertDoctorAction.isPending}
+              disabled={upsertDoctorAction.status === "executing"}
             >
-              {upsertDoctorAction.isExecuting ? "Adicionando..." : "Adicionar"}
+              {upsertDoctorAction.status === "executing" ? (
+                <>
+                  <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                  Adicionando...
+                </>
+              ) : (
+                "Adicionar"
+              )}
             </Button>
           </DialogFooter>
         </form>
