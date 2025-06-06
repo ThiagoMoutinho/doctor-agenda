@@ -91,7 +91,7 @@ export default function SignUpForm() {
   }
 
   return (
-    <Card className="w-full max-w-[580px] p-2 shadow-lg">
+    <Card className="w-full max-w-[550px] p-2 shadow-lg">
       <Form {...form}>
         <form onSubmit={form.handleSubmit(handleSubmit)} className="space-y-7">
           <CardHeader className="px-8 pt-8">
