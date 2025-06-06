@@ -120,7 +120,7 @@ export const doctorsTable = pgTable("doctors", {
   availableFromTime: time("available_from_time").notNull(),
   availableToTime: time("available_to_time").notNull(),
   specialty: text("specialty").notNull(),
-  appointmentDuration: integer("appoint_price_in_cents").notNull(),
+  appointmentPriceInCents: integer("appointment_price_in_cents").notNull(),
   createdAt: timestamp("created_at").defaultNow().notNull(),
   updatedAt: timestamp("updated_at")
     .defaultNow()
