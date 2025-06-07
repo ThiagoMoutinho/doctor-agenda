@@ -390,6 +390,7 @@ const UpsertDoctorForm = ({ onSuccess, onError }: UpsertDoctorFormProps) => {
           />
           <DialogFooter>
             <Button
+              className="cursor-pointer"
               type="submit"
               disabled={upsertDoctorAction.status === "executing"}
             >
