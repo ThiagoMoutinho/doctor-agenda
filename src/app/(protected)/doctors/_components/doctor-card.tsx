@@ -1,9 +1,13 @@
+"use client";
+
 import {
   Calendar1Icon,
   ClockIcon,
   DollarSignIcon,
   EyeIcon,
+  TrashIcon,
 } from "lucide-react";
+import React from "react";
 
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Badge } from "@/components/ui/badge";
@@ -17,21 +21,52 @@ import {
 import { Dialog, DialogTrigger } from "@/components/ui/dialog";
 import { Separator } from "@/components/ui/separator";
 import { doctorsTable } from "@/db/schema";
+import { formatCurrencyInCents } from "@/helpers/currency";
 
 import { getAvailability } from "../_helpers/availability";
 import UpsertDoctorForm from "./upsert-doctor-form";
-import { formatCurrencyInCents } from "@/helpers/currency";
+
+import deleteDoctor from "@/actions/delete-doctor";
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+  AlertDialogTrigger,
+} from "@/components/ui/alert-dialog";
+import { useAction } from "next-safe-action/hooks";
+import { toast } from "sonner";
 
 interface DoctorCardProps {
   doctor: typeof doctorsTable.$inferSelect;
 }
 
 const DoctorCard = ({ doctor }: DoctorCardProps) => {
+  const [isUpsertDoctorFormOpen, setIsUpsertDoctorFormOpen] =
+    React.useState(false);
   const doctorInitials = doctor.name
     .split(" ")
     .map((name) => name[0])
     .join("");
   const availability = getAvailability(doctor);
+
+  const deleteDoctorAction = useAction(deleteDoctor, {
+    onSuccess: () => {
+      toast.success("Médico deletado com sucesso");
+    },
+    onError: () => {
+      toast.error("Erro ao deletar médico");
+    },
+  });
+
+  const handleDeleteDoctor = () => {
+    if (!doctor) return;
+    deleteDoctorAction.execute({ id: doctor?.id });
+  };
 
   return (
     <Card>
@@ -55,25 +90,66 @@ const DoctorCard = ({ doctor }: DoctorCardProps) => {
         </Badge>
         <Badge variant="outline">
           <ClockIcon className="h-4 w-4" />
-          {availability.from.format("HH:mm")} ás {" "}
+          {availability.from.format("HH:mm")} ás{" "}
           {availability.to.format("HH:mm")}
         </Badge>
         <Badge variant="outline">
           <DollarSignIcon className="h-4 w-4" />
-          {formatCurrencyInCents(doctor.appointmentPriceInCents / 100)}
+          {formatCurrencyInCents(doctor.appointmentPriceInCents)}
         </Badge>
       </CardContent>
       <Separator />
       <CardFooter>
-        <Dialog>
-          <DialogTrigger asChild>
-            <Button className="w-full cursor-pointer">
-              <EyeIcon className="h-4 w-4" />
-              Ver detalhes
-            </Button>
-          </DialogTrigger>
-        <UpsertDoctorForm />
-        </Dialog>
+        <div className="flex w-full">
+          <AlertDialog>
+            <AlertDialogTrigger asChild>
+              <Button variant="outline" className="cursor-pointer">
+                <TrashIcon />
+                Deletar médico
+              </Button>
+            </AlertDialogTrigger>
+            <AlertDialogContent>
+              <AlertDialogHeader>
+                <AlertDialogTitle>
+                  Tem certeza que deseja excluir o médico?
+                </AlertDialogTitle>
+                <AlertDialogDescription>
+                  Esta ação não pode ser desfeita. Isso irá deletar o médico e
+                  remover todos os dados relacionados a ele.
+                </AlertDialogDescription>
+              </AlertDialogHeader>
+              <AlertDialogFooter>
+                <AlertDialogCancel>Cancelar</AlertDialogCancel>
+                <AlertDialogAction onClick={handleDeleteDoctor}>
+                  Deletar
+                </AlertDialogAction>
+              </AlertDialogFooter>
+            </AlertDialogContent>
+          </AlertDialog>
+        </div>
+        <div >
+          <Dialog
+            open={isUpsertDoctorFormOpen}
+            onOpenChange={setIsUpsertDoctorFormOpen}
+          >
+            <DialogTrigger asChild>
+              <Button className="w-full cursor-pointer">
+                <EyeIcon className="h-4 w-4" />
+                Ver detalhes
+              </Button>
+            </DialogTrigger>
+            <UpsertDoctorForm
+              doctor={{
+                ...doctor,
+                availableFromTime: availability.from.format("HH:mm"),
+                availableToTime: availability.to.format("HH:mm"),
+              }}
+              onSuccess={() => {
+                setIsUpsertDoctorFormOpen(false);
+              }}
+            />
+          </Dialog>
+        </div>
       </CardFooter>
     </Card>
   );

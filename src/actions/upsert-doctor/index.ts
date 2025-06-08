@@ -63,19 +63,19 @@ export const upsertDoctor = actionClient
           id,
           ...rest,
           clinicId: session.user.clinic.id,
-          availableFromTime: availableFromTimeUTC.format("HH:mm:ss"),
-          availableToTime: availableToTimeUTC.format("HH:mm:ss"),
+          availableFromTime: availableFromTimeUTC.format("HH:mm"),
+          availableToTime: availableToTimeUTC.format("HH:mm"),
         })
         .onConflictDoUpdate({
           target: [doctorsTable.id],
           set: {
             ...rest,
-            availableFromTime: availableFromTimeUTC.format("HH:mm:ss"),
-            availableToTime: availableToTimeUTC.format("HH:mm:ss"),
+            availableFromTime: availableFromTimeUTC.format("HH:mm"),
+            availableToTime: availableToTimeUTC.format("HH:mm"),
           },
         });
 
-      revalidatePath("/doctors");
+      revalidatePath("/(protected)/doctors");
       return { success: true };
     } catch (error) {
       console.error("Error upserting doctor:", error);
