@@ -2,9 +2,8 @@
 
 import { ColumnDef } from "@tanstack/react-table";
 
-
-
 import { patientsTable } from "@/db/schema";
+
 import PatientsTableAction from "./table-actions";
 
 

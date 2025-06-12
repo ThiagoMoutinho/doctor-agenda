@@ -2,6 +2,7 @@ import { asc, eq } from "drizzle-orm";
 import { headers } from "next/headers";
 import { redirect } from "next/navigation";
 
+import { DataTable } from "@/components/ui/data-table";
 import { Dialog } from "@/components/ui/dialog";
 import {
   PageActions,
@@ -16,7 +17,6 @@ import { db } from "@/db";
 import { patientsTable } from "@/db/schema";
 import { auth } from "@/lib/auth";
 
-import { DataTable } from "@/components/ui/data-table";
 import { AddPatientButton } from "./_components/add-patient-button";
 import { patientTableColumns } from "./_components/table-columns";
 
