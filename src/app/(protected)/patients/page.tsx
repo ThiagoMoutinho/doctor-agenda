@@ -13,13 +13,13 @@ import {
   PageTitle,
 } from "@/components/ui/page-container";
 import { db } from "@/db";
-import { doctorsTable } from "@/db/schema";
+import { patientsTable } from "@/db/schema";
 import { auth } from "@/lib/auth";
 
-import AddDoctorButton from "./_components/add-doctor-button";
-import DoctorCard from "./_components/doctor-card";
+import { AddPatientButton } from "./_components/add-patient-button";
+import PatientCard from "./_components/patient-card";
 
-const DoctorsPage = async () => {
+const PatientsPage = async () => {
   const session = await auth.api.getSession({
     headers: await headers(),
   });
@@ -32,27 +32,27 @@ const DoctorsPage = async () => {
     redirect("/clinic-form");
   }
 
-  const doctors = await db.query.doctorsTable.findMany({
-    where: eq(doctorsTable.clinicId, session.user.clinic.id),
-    orderBy: [asc(doctorsTable.name)],
+  const patients = await db.query.patientsTable.findMany({
+    where: eq(patientsTable.clinicId, session.user.clinic.id),
+    orderBy: [asc(patientsTable.name)],
   });
 
   return (
     <PageContainer>
       <PageHeader>
         <PageHeaderContent>
-          <PageTitle>Médicos</PageTitle>
-          <PageDescription>Gerencie os médicos da sua clínica</PageDescription>
+          <PageTitle>Pacientes</PageTitle>
+          <PageDescription>Gerencie os pacientes da sua clínica</PageDescription>
         </PageHeaderContent>
         <PageActions>
-          <AddDoctorButton />
+          <AddPatientButton />
         </PageActions>
       </PageHeader>
       <Dialog>
         <PageContent>
           <div className="grid grid-cols-4 gap-6">
-            {doctors.map((doctor) => (
-              <DoctorCard key={doctor.id} doctor={doctor} />
+            {patients.map((patient) => (
+              <PatientCard key={patient.id} patient={patient} />
             ))}
           </div>
         </PageContent>
@@ -61,4 +61,4 @@ const DoctorsPage = async () => {
   );
 };
 
-export default DoctorsPage;
+export default PatientsPage;

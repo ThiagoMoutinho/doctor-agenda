@@ -1,15 +1,14 @@
 "use client";
-
 import { zodResolver } from "@hookform/resolvers/zod";
-import { Loader2, TrashIcon } from "lucide-react";
+import { Loader2 } from "lucide-react";
 import { useAction } from "next-safe-action/hooks";
+import React from 'react'
 import { useForm } from "react-hook-form";
 import { NumericFormat } from "react-number-format";
 import { toast } from "sonner";
 import { z } from "zod";
 
 import { upsertDoctor } from "@/actions/upsert-doctor";
-
 import { Button } from "@/components/ui/button";
 import {
   DialogContent,
@@ -72,15 +71,15 @@ const formSchema = z
   );
 
 interface UpsertDoctorFormProps {
+  isOpen: boolean;
   doctor?: typeof doctorsTable.$inferSelect;
   onSuccess?: () => void;
-  onError?: () => void;
 }
 
 const UpsertDoctorForm = ({
   doctor,
   onSuccess,
-  onError,
+  isOpen,
 }: UpsertDoctorFormProps) => {
   const form = useForm<z.infer<typeof formSchema>>({
     shouldUnregister: true,
@@ -98,16 +97,31 @@ const UpsertDoctorForm = ({
     },
   });
 
+  React.useEffect(() => {
+    if(isOpen){
+      form.reset({
+        name: doctor?.name?? "",
+        specialty: doctor?.specialty?? "",
+        appointmentPrice: doctor?.appointmentPriceInCents
+         ? doctor.appointmentPriceInCents / 100
+          : 0,
+        availableFromWeekDay: doctor?.availableFromWeekDay?.toString()?? "1",
+        availableToWeekDay: doctor?.availableToWeekDay?.toString()?? "5",
+        availableFromTime: doctor?.availableFromTime?? "",
+        availableToTime: doctor?.availableToTime?? "",
+      })
+    }
+  },[isOpen, form, doctor])
+
   const upsertDoctorAction = useAction(upsertDoctor, {
     onSuccess: () => {
-      toast.success("Médico adicionado com sucesso");
+      toast.success("Médico salvo com sucesso");
       onSuccess?.();
     },
     onError: () => {
       toast.error(
         doctor ? "Erro ao atualizar médico" : "Erro ao adicionar médico",
       );
-      onError?.();
     },
   });
 
@@ -127,8 +141,6 @@ const UpsertDoctorForm = ({
       availableToWeekDay: parseInt(availableToWeekDay),
     });
   };
-
-  
 
   return (
     <DialogContent>

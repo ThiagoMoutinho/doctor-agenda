@@ -61,7 +61,6 @@ const LoginForm = () => {
       },
       {
         onSuccess: async () => {
-          toast.success("Login realizado com sucesso");
           const session = await authClient.getSession();
           if (!session?.data?.user?.clinic) {
             router.push("/clinic-form");

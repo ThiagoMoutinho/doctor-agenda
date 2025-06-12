@@ -8,6 +8,13 @@
       "when": 1749227928411,
       "tag": "0000_kind_nomad",
       "breakpoints": true
+    },
+    {
+      "idx": 1,
+      "version": "7",
+      "when": 1749598222467,
+      "tag": "0001_lean_blink",
+      "breakpoints": true
     }
   ]
 }

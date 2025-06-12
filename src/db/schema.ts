@@ -146,9 +146,9 @@ export const patientsTable = pgTable("patients", {
     .notNull()
     .references(() => clinicsTable.id, { onDelete: "cascade" }),
   name: text("name").notNull(),
-  email: text("email").notNull(),
-  phoneNumber: text("phone_number").notNull(),
-  sex: patienSexEnum("sex").notNull(),
+  email: text("email"),
+  phoneNumber: text("phone_number"),
+  sex: patienSexEnum("sex"),
   createdAt: timestamp("created_at").defaultNow().notNull(),
   updatedAt: timestamp("updated_at")
     .defaultNow()
