@@ -23,6 +23,7 @@ export function AddPatientButton() {
         onSuccess={() => {
           setIsOpen(false);
         }}
+        isOpen={isOpen}
       />
     </Dialog>
   );

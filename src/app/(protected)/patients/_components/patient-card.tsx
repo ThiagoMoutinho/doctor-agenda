@@ -26,7 +26,12 @@ import {
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
-import { Card, CardContent, CardFooter, CardHeader } from "@/components/ui/card";
+import {
+  Card,
+  CardContent,
+  CardFooter,
+  CardHeader,
+} from "@/components/ui/card";
 import { Dialog, DialogTrigger } from "@/components/ui/dialog";
 import { Separator } from "@/components/ui/separator";
 import { patientsTable } from "@/db/schema";
@@ -41,10 +46,11 @@ const PatientCard = ({ patient }: PatientCardProps) => {
   const [isUpsertPatientFormOpen, setIsUpsertPatientFormOpen] =
     React.useState(false);
 
-  const patientInitials = patient.name
-    .split(" ")
-    .map((name) => name[0])
-    .join("");
+  const patientInitials = (() => {
+    const names = patient.name.split(" ").filter((name) => name.length > 0);
+    if (names.length === 0) return names[0][0];
+    return names[0][0] + names[names.length - 1][0];
+  })();
 
   const deletePatientAction = useAction(deletePatient, {
     onSuccess: () => {
@@ -130,6 +136,7 @@ const PatientCard = ({ patient }: PatientCardProps) => {
             onSuccess={() => {
               setIsUpsertPatientFormOpen(false);
             }}
+            isOpen={isUpsertPatientFormOpen}
           />
         </Dialog>
         <AlertDialog>

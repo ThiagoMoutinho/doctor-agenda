@@ -34,6 +34,7 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { patientsTable } from "@/db/schema";
+import React from "react";
 
 const formSchema = z.object({
   id: z.string().uuid().optional(),
@@ -49,14 +50,12 @@ const formSchema = z.object({
 });
 
 interface UpsertPatientFormProps {
+  isOpen: boolean;
   patient?: typeof patientsTable.$inferSelect;
   onSuccess?: () => void;
 }
 
-const UpsertPatientForm = ({
-  patient,
-  onSuccess,
-}: UpsertPatientFormProps) => {
+const UpsertPatientForm = ({ patient, onSuccess }: UpsertPatientFormProps) => {
   const form = useForm<z.infer<typeof formSchema>>({
     shouldUnregister: true,
     resolver: zodResolver(formSchema),
@@ -71,13 +70,27 @@ const UpsertPatientForm = ({
 
   const upsertPatientAction = useAction(upsertPatient, {
     onSuccess() {
-      toast.success("Paciente salvo com sucesso!");
+      toast.success("Paciente salvo com sucesso");
       onSuccess?.();
     },
     onError() {
-      toast.error("Ocorreu um erro ao salvar o paciente.");
+      toast.error("Ocorreu um erro ao salvar o paciente");
     },
   });
+
+  React.useEffect(() => {
+    if (patient) {
+      form.reset({
+        id: patient.id,
+        name: patient?.name ?? "",
+        email: patient?.email ?? "",
+        phoneNumber: patient?.phoneNumber ?? "",
+        sex: patient.sex ?? undefined,
+      });
+    } else {
+      form.reset();
+    }
+  }, [patient, form]);
 
   function onSubmit(values: z.infer<typeof formSchema>) {
     upsertPatientAction.execute({
