@@ -60,7 +60,13 @@ const PatientsTableAction = ({ patient }: PatientsTableActionsProps) => {
           </Button>
         </DropdownMenuTrigger>
         <DropdownMenuContent align="end">
-          <DropdownMenuLabel>{patient.name}</DropdownMenuLabel>
+          <DropdownMenuLabel>
+            {(() => {
+              const nameParts = patient.name.split(" ");
+              if (nameParts.length === 1) return nameParts[0];
+              return `${nameParts[0]} ${nameParts[nameParts.length - 1]}`;
+            })()}
+          </DropdownMenuLabel>
           <DropdownMenuSeparator />
           <DropdownMenuItem onClick={() => setUpsertDialogIsOpen(true)}>
             <EditIcon />
