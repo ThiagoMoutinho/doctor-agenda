@@ -82,7 +82,7 @@ const UpsertAppointmentForm = ({
       patientId: "",
       doctorId: "",
       appointmentPriceInCents: 0,
-      date: appointment?.data ?? undefined,
+      date: appointment?.date ?? undefined,
       time: "",
     },
   });
@@ -113,7 +113,7 @@ const UpsertAppointmentForm = ({
         patientId: appointment?.patientId,
         doctorId: appointment?.doctorId,
         appointmentPriceInCents: 0, // Will be set by doctor selection
-        date: new Date(appointment.data),
+        date: new Date(appointment.date),
         time: "",
       });
     } else {

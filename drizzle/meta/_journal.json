@@ -15,6 +15,20 @@
       "when": 1749598222467,
       "tag": "0001_lean_blink",
       "breakpoints": true
+    },
+    {
+      "idx": 2,
+      "version": "7",
+      "when": 1761427534413,
+      "tag": "0002_rare_spiral",
+      "breakpoints": true
+    },
+    {
+      "idx": 3,
+      "version": "7",
+      "when": 1761427664112,
+      "tag": "0003_jittery_dexter_bennett",
+      "breakpoints": true
     }
   ]
 }

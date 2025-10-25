@@ -33,8 +33,9 @@ export function AddAppointmentButton({
         doctors={doctors}
         onSuccess={() => {
           setIsOpen(false);
+          // Refresh the page to show the new appointment
+          window.location.reload();
         }}
-        isOpen={isOpen}
       />
     </Dialog>
   );

@@ -17,6 +17,10 @@ export const upsertAppointment = actionClient
     const { id, date, time, ...rest } = parsedInput;
     const clinicId = await getClinicId();
 
+    if (!clinicId) {
+      throw new Error("Clinic ID not found.");
+    }
+
     // Combinar data e horário em um timestamp
     const appointmentDateTime = dayjs(date)
       .set("hour", parseInt(time.split(":")[0]))
@@ -27,7 +31,7 @@ export const upsertAppointment = actionClient
     const appointmentData = {
       ...rest,
       clinicId,
-      data: appointmentDateTime,
+      date: appointmentDateTime,
     };
 
     if (id) {
@@ -38,14 +42,15 @@ export const upsertAppointment = actionClient
         .where(eq(appointmentsTable.id, id));
     } else {
       // Inserir novo agendamento
-      if (!clinicId) throw new Error("Clinic ID is required");
-      await db.insert(appointmentsTable).values({
-        ...appointmentData,
-        clinicId: clinicId as string
-      });
+      await db.insert(appointmentsTable).values(appointmentData);
     }
 
     revalidatePath("/appointments");
+    return {
+      message: id
+        ? "Agendamento atualizado com sucesso!"
+        : "Agendamento adicionado com sucesso!",
+    };
   });
 
 export default upsertAppointment;
